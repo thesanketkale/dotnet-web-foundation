@@ -1,0 +1,38 @@
+@page
+@model Foundation.Web.Pages.Account.LoginWithRecoveryCodeModel
+@{
+    ViewData["Title"] = "Recovery code verification";
+}
+
+<div class="row" style="display: flex; justify-content: center; margin-top: var(--space-8);">
+    <div style="width: 100%; max-width: 440px;">
+        <div class="card" style="padding: var(--space-8);">
+            <h1 style="font-size: var(--text-2xl); margin-top: 0; text-align: center;">Recovery code</h1>
+            <p class="text-muted" style="text-align: center; margin-bottom: var(--space-6);">
+                You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code.
+            </p>
+
+            <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="form-group">
+                    <label asp-for="Input.RecoveryCode" class="form-label">Recovery Code</label>
+                    <input asp-for="Input.RecoveryCode" class="form-control" autocomplete="off" aria-required="true" placeholder="XXXXX-XXXXX" />
+                    <span asp-validation-for="Input.RecoveryCode" class="text-danger"></span>
+                </div>
+
+                <div style="margin-top: var(--space-6);">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Verify & Sign In</button>
+                </div>
+            </form>
+
+            <div style="margin-top: var(--space-6); text-align: center; font-size: var(--text-sm);">
+                <a asp-page="./Login">Back to Sign In</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

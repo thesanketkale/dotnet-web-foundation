@@ -1,0 +1,67 @@
+@page
+@model Foundation.Web.Pages.IndexModel
+@{
+    ViewData["Title"] = "Enterprise ASP.NET Core Foundation";
+}
+
+<section style="text-align: center; padding: var(--space-12) 0 var(--space-8) 0;">
+    <h1 style="max-width: 800px; margin: 0 auto var(--space-4) auto;">
+        Modular ASP.NET Core Web Application Foundation
+    </h1>
+    <p style="font-size: var(--text-lg); max-width: 680px; margin: 0 auto var(--space-6) auto;">
+        Production-ready architecture with enterprise Identity, user profiles, admin CMS, dual SQL Server / MySQL persistence, OpenTelemetry observability, and chiseled container deployment.
+    </p>
+    <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+        <a class="btn btn-primary" asp-page="/Account/Register">Get Started</a>
+        <a class="btn btn-secondary" asp-page="/Cms/Page" asp-route-slug="about">Explore Architecture</a>
+    </div>
+</section>
+
+<section style="margin-top: var(--space-8);">
+    <h2 style="text-align: center; margin-bottom: var(--space-8);">Architectural Capabilities</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-6);">
+        <div class="card">
+            <h3>Enterprise Identity</h3>
+            <p>ASP.NET Core Identity with secure cookie auth, TOTP 2FA (RFC 6238), recovery codes, account lockout after 5 attempts, email confirmation, and rate limiting.</p>
+        </div>
+        <div class="card">
+            <h3>Clean Architecture</h3>
+            <p>Domain, Application, Infrastructure, and Web layers enforced via automated NetArchTest architecture tests. Zero commercial or viral copyleft dependencies.</p>
+        </div>
+        <div class="card">
+            <h3>Dual Database Support</h3>
+            <p>First-class EF Core migrations for Microsoft SQL Server and MySQL / MariaDB via separate migration assemblies, soft-delete filters, and audit interceptors.</p>
+        </div>
+        <div class="card">
+            <h3>Lightweight CMS</h3>
+            <p>Markdown-driven content engine for pages and posts with revision history, slug management, media uploads, and strict HtmlSanitizer XSS protection.</p>
+        </div>
+        <div class="card">
+            <h3>Production Observability</h3>
+            <p>Native OpenTelemetry traces and metrics exported over OTLP alongside structured Serilog logging and RFC 9457 Problem Details error responses.</p>
+        </div>
+        <div class="card">
+            <h3>Hardened Containerization</h3>
+            <p>Chiseled non-root container image with health checks (/health/live, /health/ready) and Docker Compose profiles for seamless local development.</p>
+        </div>
+    </div>
+</section>
+
+@if (Model.LatestPosts.Count > 0)
+{
+    <section style="margin-top: var(--space-12);">
+        <h2>Latest Content</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-6); margin-top: var(--space-4);">
+            @foreach (var post in Model.LatestPosts)
+            {
+                <article class="card">
+                    <h3><a asp-page="/Cms/Post" asp-route-slug="@post.Slug">@post.Title</a></h3>
+                    <p>@post.Summary</p>
+                    <time style="font-size: var(--text-xs); color: var(--text-muted);">
+                        @(post.PublishedAtUtc?.ToString("MMMM dd, yyyy") ?? post.CreatedAtUtc.ToString("MMMM dd, yyyy"))
+                    </time>
+                </article>
+            }
+        </div>
+    </section>
+}

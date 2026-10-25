@@ -1,0 +1,20 @@
+@using Microsoft.AspNetCore.Identity
+@using Foundation.Infrastructure.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+<ul class="nav flex-column" style="display: flex; flex-direction: column; gap: var(--space-2); list-style: none; padding: 0;">
+    <li>
+        <a class="nav-link" asp-page="./Index">Profile</a>
+    </li>
+    <li>
+        <a class="nav-link" asp-page="./ChangePassword">Password</a>
+    </li>
+    <li>
+        <a class="nav-link" asp-page="./TwoFactorAuthentication">Two-Factor Authentication</a>
+    </li>
+    <li>
+        <a class="nav-link" asp-page="./PersonalData">Personal Data</a>
+    </li>
+</ul>

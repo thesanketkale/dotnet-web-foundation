@@ -1,0 +1,17 @@
+@page
+@model Foundation.Web.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "Log out";
+}
+
+<div class="row" style="display: flex; justify-content: center; margin-top: var(--space-8);">
+    <div style="width: 100%; max-width: 440px;">
+        <div class="card" style="padding: var(--space-8); text-align: center;">
+            <h1 style="font-size: var(--text-2xl); margin-top: 0;">Log out</h1>
+            <p class="text-muted">You have successfully logged out of the application.</p>
+            <div style="margin-top: var(--space-6);">
+                <a asp-page="/Index" class="btn btn-primary">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</div>

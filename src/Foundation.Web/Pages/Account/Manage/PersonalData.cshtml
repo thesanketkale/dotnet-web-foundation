@@ -1,0 +1,22 @@
+@page
+@model Foundation.Web.Pages.Account.Manage.PersonalDataModel
+@{
+    ViewData["Title"] = "Personal Data";
+}
+
+<div class="card" style="padding: var(--space-8);">
+    <h2 style="margin-top: 0; font-size: var(--text-2xl);">Personal Data & Privacy</h2>
+
+    <p>Your account contains personal data that you have provided to us. This page allows you to download or permanently delete that data.</p>
+
+    <div class="alert alert-warning" role="alert" style="margin-top: var(--space-4);">
+        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+    </div>
+
+    <div style="display: flex; gap: var(--space-4); margin-top: var(--space-6); flex-wrap: wrap;">
+        <form method="post" asp-page-handler="Download">
+            <button type="submit" class="btn btn-primary">Download Personal Data (JSON)</button>
+        </form>
+        <a asp-page="./DeletePersonalData" class="btn btn-danger">Delete Account & Data</a>
+    </div>
+</div>

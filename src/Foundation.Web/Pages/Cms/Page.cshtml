@@ -1,0 +1,21 @@
+@page "/p/{slug}"
+@model Foundation.Web.Pages.Cms.PageViewerModel
+@{
+    ViewData["Title"] = Model.CmsPage?.Title ?? "Page";
+}
+
+<article class="cms-article card" style="margin-top: var(--space-8); padding: var(--space-8);">
+    @if (Model.CmsPage != null)
+    {
+        <header style="border-bottom: 1px solid var(--border); padding-bottom: var(--space-4); margin-bottom: var(--space-6);">
+            <h1 style="font-size: var(--text-3xl); margin-top: 0; color: var(--text-heading);">@Model.CmsPage.Title</h1>
+            <div class="text-muted" style="font-size: var(--text-sm);">
+                Last updated @(Model.CmsPage.UpdatedAtUtc?.ToString("MMMM dd, yyyy") ?? Model.CmsPage.CreatedAtUtc.ToString("MMMM dd, yyyy"))
+            </div>
+        </header>
+
+        <div class="cms-content" style="line-height: 1.7; font-size: var(--text-base);">
+            @Html.Raw(Model.CmsPage.ContentHtml)
+        </div>
+    }
+</article>

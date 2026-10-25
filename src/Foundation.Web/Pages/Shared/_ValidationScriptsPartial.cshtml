@@ -1,0 +1,12 @@
+<!-- Validation Scripts Partial -->
+<script nonce="@(Context.Items[Foundation.Web.Middleware.NonceMiddleware.NonceKey])">
+  // Client-side form submission guard
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', () => {
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.setAttribute('data-original-text', submitBtn.textContent);
+      }
+    });
+  });
+</script>

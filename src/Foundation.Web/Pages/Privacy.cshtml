@@ -1,0 +1,34 @@
+@page
+@model Foundation.Web.Pages.PrivacyModel
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+<div class="card" style="margin-top: var(--space-8); padding: var(--space-8);">
+    <h1 style="margin-top: 0; font-size: var(--text-3xl);">Privacy Policy</h1>
+    <p class="text-muted">Effective Date: October 25, 2026</p>
+
+    <section style="margin-top: var(--space-6);">
+        <h2>1. Commitment to Privacy</h2>
+        <p>This software template is engineered to respect user privacy and adhere to data protection regulations (such as GDPR). Personal data collected is limited strictly to authentication credentials and user profile information provided voluntarily.</p>
+    </section>
+
+    <section style="margin-top: var(--space-6);">
+        <h2>2. Data Collection & Processing</h2>
+        <ul>
+            <li><strong>Account Data:</strong> Email addresses and salted password hashes stored securely via ASP.NET Core Identity.</li>
+            <li><strong>User Profiles:</strong> Optional display names, biographies, and avatars.</li>
+            <li><strong>Security Audit Logs:</strong> Access records, authentication failures, and data mutations logged for system integrity.</li>
+        </ul>
+    </section>
+
+    <section style="margin-top: var(--space-6);">
+        <h2>3. Your Rights & Data Portability</h2>
+        <p>In accordance with data protection regulations, authenticated users possess the right to:</p>
+        <ul>
+            <li><strong>Export Personal Data:</strong> Download a full machine-readable JSON archive of all personal data held in the system.</li>
+            <li><strong>Erasure (Right to be Forgotten):</strong> Permanently delete their account and associated profile records.</li>
+        </ul>
+        <p>These actions can be performed self-service at any time from your <a asp-page="/Account/Manage/PersonalData">Account Settings</a>.</p>
+    </section>
+</div>

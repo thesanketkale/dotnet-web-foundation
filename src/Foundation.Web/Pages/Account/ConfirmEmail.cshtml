@@ -1,0 +1,21 @@
+@page
+@model Foundation.Web.Pages.Account.ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm Email";
+}
+
+<div class="row" style="display: flex; justify-content: center; margin-top: var(--space-8);">
+    <div style="width: 100%; max-width: 480px;">
+        <div class="card" style="padding: var(--space-8); text-align: center;">
+            <h1 style="font-size: var(--text-2xl); margin-top: 0;">Email Confirmation</h1>
+
+            <div class="alert alert-info" role="alert" style="margin-top: var(--space-6);">
+                @Model.StatusMessage
+            </div>
+
+            <div style="margin-top: var(--space-6);">
+                <a asp-page="./Login" class="btn btn-primary">Proceed to Sign In</a>
+            </div>
+        </div>
+    </div>
+</div>

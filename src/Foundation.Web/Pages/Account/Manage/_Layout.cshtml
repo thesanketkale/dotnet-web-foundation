@@ -1,0 +1,21 @@
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<div style="margin-top: var(--space-8);">
+    <h1 style="font-size: var(--text-3xl); margin-top: 0;">Manage your account</h1>
+    <p class="text-muted">Change your account settings, update profile, and manage security options.</p>
+
+    <div style="display: grid; grid-template-columns: 240px 1fr; gap: var(--space-8); margin-top: var(--space-6);">
+        <aside style="border-right: 1px solid var(--border); padding-right: var(--space-4);">
+            <partial name="_ManageNav" />
+        </aside>
+        <div style="min-width: 0;">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}

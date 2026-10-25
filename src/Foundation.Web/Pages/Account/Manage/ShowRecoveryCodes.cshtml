@@ -1,0 +1,32 @@
+@page
+@model Foundation.Web.Pages.Account.Manage.ShowRecoveryCodesModel
+@{
+    ViewData["Title"] = "Recovery codes";
+}
+
+<div class="card" style="padding: var(--space-8);">
+    <h2 style="margin-top: 0; font-size: var(--text-2xl);">Recovery Codes</h2>
+
+    <div class="alert alert-warning" role="alert">
+        <strong>Put these codes in a safe place.</strong>
+        <p style="margin-top: var(--space-2); margin-bottom: 0;">
+            If you lose your device and do not have the recovery codes, you will lose access to your account.
+        </p>
+    </div>
+
+    <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin: var(--space-6) 0; max-width: 480px;">
+        @if (Model.RecoveryCodes != null)
+        {
+            @for (var row = 0; row < Model.RecoveryCodes.Length; row++)
+            {
+                <div style="background-color: var(--surface-alt); padding: var(--space-2) var(--space-4); border-radius: var(--radius-sm); border: 1px solid var(--border); font-family: monospace; font-size: var(--text-base);">
+                    @Model.RecoveryCodes[row]
+                </div>
+            }
+        }
+    </div>
+
+    <div>
+        <a asp-page="./TwoFactorAuthentication" class="btn btn-primary">Done</a>
+    </div>
+</div>

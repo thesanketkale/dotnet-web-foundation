@@ -1,0 +1,84 @@
+@page
+@model Foundation.Web.Pages.Admin.Users.IndexModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "User Management";
+}
+
+<div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+        <div>
+            <h1 style="font-size: var(--text-2xl); margin: 0;">User Management</h1>
+            <p class="text-muted" style="margin-top: var(--space-1); margin-bottom: 0;">Manage accounts, unlock users, and assign system roles.</p>
+        </div>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: var(--text-sm);">
+                <thead>
+                    <tr style="background-color: var(--surface-alt); border-bottom: 2px solid var(--border); text-align: left;">
+                        <th style="padding: var(--space-4);">Username</th>
+                        <th style="padding: var(--space-4);">Email</th>
+                        <th style="padding: var(--space-4);">Status</th>
+                        <th style="padding: var(--space-4);">Roles</th>
+                        <th style="padding: var(--space-4); text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: var(--space-4); font-weight: 600;">@user.UserName</td>
+                            <td style="padding: var(--space-4);">@user.Email</td>
+                            <td style="padding: var(--space-4);">
+                                @if (user.IsLockedOut)
+                                {
+                                    <span class="badge badge-danger" style="padding: 2px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); color: var(--danger);">Locked Out</span>
+                                }
+                                else if (user.EmailConfirmed)
+                                {
+                                    <span class="badge badge-success" style="padding: 2px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); color: var(--success);">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-warning" style="padding: 2px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); color: var(--warning);">Unconfirmed</span>
+                                }
+                            </td>
+                            <td style="padding: var(--space-4);">
+                                <div style="display: flex; gap: var(--space-1); flex-wrap: wrap;">
+                                    @foreach (var role in user.Roles)
+                                    {
+                                        <span style="background-color: var(--surface-alt); padding: 2px 6px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: var(--text-xs);">
+                                            @role
+                                        </span>
+                                    }
+                                </div>
+                            </td>
+                            <td style="padding: var(--space-4); text-align: right;">
+                                <div style="display: inline-flex; gap: var(--space-2); align-items: center;">
+                                    @if (user.IsLockedOut)
+                                    {
+                                        <form method="post" asp-page-handler="Unlock" asp-route-userId="@user.Id" style="display: inline;">
+                                            <button type="submit" class="btn btn-secondary btn-sm">Unlock</button>
+                                        </form>
+                                    }
+                                    <form method="post" asp-page-handler="ToggleRole" asp-route-userId="@user.Id" asp-route-roleName="Editor" style="display: inline;">
+                                        <button type="submit" class="btn btn-secondary btn-sm">
+                                            @(user.Roles.Contains("Editor") ? "Remove Editor" : "Make Editor")
+                                        </button>
+                                    </form>
+                                    <form method="post" asp-page-handler="ToggleRole" asp-route-userId="@user.Id" asp-route-roleName="Admin" style="display: inline;">
+                                        <button type="submit" class="btn btn-secondary btn-sm">
+                                            @(user.Roles.Contains("Admin") ? "Remove Admin" : "Make Admin")
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

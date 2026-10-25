@@ -1,0 +1,59 @@
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+    var currentPath = ViewContext.HttpContext.Request.Path.Value ?? "";
+}
+
+<div class="admin-wrapper" style="margin-top: var(--space-6);">
+    <div style="display: grid; grid-template-columns: 240px 1fr; gap: var(--space-8);">
+        <!-- Admin Sidebar Landmark -->
+        <nav aria-label="Admin Navigation" class="admin-sidebar" style="border-right: 1px solid var(--border); padding-right: var(--space-6);">
+            <div style="font-weight: 700; font-size: var(--text-lg); margin-bottom: var(--space-4); color: var(--primary);">
+                Administration
+            </div>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-2);">
+                <li>
+                    <a asp-page="/Admin/Index" class="nav-link @(currentPath.Equals("/Admin", StringComparison.OrdinalIgnoreCase) || currentPath.Equals("/Admin/Index", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a asp-page="/Admin/Pages/Index" class="nav-link @(currentPath.StartsWith("/Admin/Pages", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                        CMS Pages
+                    </a>
+                </li>
+                <li>
+                    <a asp-page="/Admin/Posts/Index" class="nav-link @(currentPath.StartsWith("/Admin/Posts", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                        Blog Posts
+                    </a>
+                </li>
+                <li>
+                    <a asp-page="/Admin/Media/Index" class="nav-link @(currentPath.StartsWith("/Admin/Media", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                        Media Library
+                    </a>
+                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li style="border-top: 1px solid var(--border); margin-top: var(--space-2); padding-top: var(--space-2);">
+                        <a asp-page="/Admin/Users/Index" class="nav-link @(currentPath.StartsWith("/Admin/Users", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            User Management
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-page="/Admin/Audit/Index" class="nav-link @(currentPath.StartsWith("/Admin/Audit", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            Audit Logs
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+        <!-- Admin Content Area -->
+        <div class="admin-content" style="min-width: 0;">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}

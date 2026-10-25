@@ -1,0 +1,59 @@
+@page
+@model Foundation.Web.Pages.Account.Manage.IndexModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="card" style="padding: var(--space-8);">
+    <h2 style="margin-top: 0; font-size: var(--text-2xl);">Profile Settings</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+        <div style="display: flex; gap: var(--space-6); align-items: center; margin-bottom: var(--space-6);">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background-color: var(--surface-alt); border: 2px solid var(--border); overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+                {
+                    <img src="@Model.AvatarUrl" alt="User Avatar" style="width: 100%; height: 100%; object-fit: cover;" />
+                }
+                else
+                {
+                    <span style="font-size: var(--text-2xl); font-weight: bold; color: var(--text-muted);">
+                        @(Model.Username.Length > 0 ? Model.Username[..1].ToUpperInvariant() : "U")
+                    </span>
+                }
+            </div>
+            <div>
+                <label asp-for="Input.AvatarFile" class="form-label">Update Avatar Image</label>
+                <input asp-for="Input.AvatarFile" type="file" accept="image/png,image/jpeg,image/webp" class="form-control" />
+                <small class="text-muted">Accepted formats: JPG, PNG, WEBP (Max 5MB).</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            <input value="@Model.Username" class="form-control" disabled />
+            <small class="text-muted">Username cannot be modified.</small>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.DisplayName" class="form-label">Display Name</label>
+            <input asp-for="Input.DisplayName" class="form-control" aria-required="true" />
+            <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Bio" class="form-label">Biography</label>
+            <textarea asp-for="Input.Bio" class="form-control" rows="4" placeholder="Tell us a little about yourself..."></textarea>
+            <span asp-validation-for="Input.Bio" class="text-danger"></span>
+        </div>
+
+        <div style="margin-top: var(--space-6);">
+            <button type="submit" class="btn btn-primary">Save Profile</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

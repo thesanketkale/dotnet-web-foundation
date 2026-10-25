@@ -1,0 +1,84 @@
+@using Foundation.Web.Middleware
+@{
+    var nonce = Context.Items[NonceMiddleware.NonceKey]?.ToString();
+    var statusMessage = TempData["StatusMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] != null ? $"{ViewData["Title"]} - dotnet-web-foundation" : "dotnet-web-foundation")</title>
+    
+    <link rel="stylesheet" href="~/css/tokens.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header class="site-header" role="banner">
+        <div class="container navbar">
+            <a class="brand-link" asp-page="/Index">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                <span>dotnet-web-foundation</span>
+            </a>
+
+            <nav role="navigation" aria-label="Main Navigation">
+                <ul class="nav-links">
+                    <li><a class="nav-link" asp-page="/Index">Home</a></li>
+                    <li><a class="nav-link" asp-page="/Cms/Page" asp-route-slug="about">About</a></li>
+                    <li><a class="nav-link" asp-page="/Cms/Page" asp-route-slug="architecture">Architecture</a></li>
+                    <li>
+                        <button id="theme-toggle" class="btn btn-secondary btn-sm" aria-label="Toggle light and dark theme" title="Toggle theme">
+                            Theme
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="user-nav">
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </header>
+
+    <main class="site-main" role="main">
+        <div class="container">
+            @if (!string.IsNullOrWhiteSpace(statusMessage))
+            {
+                <div class="alert alert-success" role="alert">
+                    <span>@statusMessage</span>
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                <div class="alert alert-danger" role="alert">
+                    <span>@errorMessage</span>
+                </div>
+            }
+
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+                <p style="margin: 0;">&copy; 2026 Sanket Kale. Released under the MIT License.</p>
+                <p style="margin: 0; font-size: var(--text-xs);">Modular ASP.NET Core foundation with Identity, EF Core, and clean architecture.</p>
+            </div>
+            <div>
+                <a asp-page="/Privacy" style="margin-right: var(--space-4);">Privacy Policy</a>
+                <a href="https://github.com/thesanketkale/dotnet-webapp-template" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true" nonce="@nonce"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

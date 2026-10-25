@@ -1,0 +1,75 @@
+@page
+@model Foundation.Web.Pages.Admin.Audit.IndexModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "System Audit Logs";
+}
+
+<div>
+    <div style="margin-bottom: var(--space-6);">
+        <h1 style="font-size: var(--text-2xl); margin: 0;">Security & Mutation Audit Logs</h1>
+        <p class="text-muted" style="margin-top: var(--space-1); margin-bottom: 0;">Trace every entity creation, modification, and deletion with field-level diffs.</p>
+    </div>
+
+    <!-- Search / Filter -->
+    <div class="card" style="padding: var(--space-4); margin-bottom: var(--space-6);">
+        <form method="get" style="display: flex; gap: var(--space-4); align-items: flex-end; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px;">
+                <label asp-for="EntityName" class="form-label">Filter by Entity Name</label>
+                <input asp-for="EntityName" class="form-control" placeholder="e.g. CmsPage, UserProfile" />
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a asp-page="./Index" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+        @if (Model.AuditList == null || Model.AuditList.Items.Count == 0)
+        {
+            <div style="padding: var(--space-6); text-align: center;" class="text-muted">
+                No audit entries found.
+            </div>
+        }
+        else
+        {
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: var(--text-sm);">
+                    <thead>
+                        <tr style="background-color: var(--surface-alt); border-bottom: 2px solid var(--border); text-align: left;">
+                            <th style="padding: var(--space-4);">Timestamp (UTC)</th>
+                            <th style="padding: var(--space-4);">Entity</th>
+                            <th style="padding: var(--space-4);">Action</th>
+                            <th style="padding: var(--space-4);">Entity ID</th>
+                            <th style="padding: var(--space-4);">User ID</th>
+                            <th style="padding: var(--space-4);">Changes (JSON Diff)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var audit in Model.AuditList.Items)
+                        {
+                            <tr style="border-bottom: 1px solid var(--border); vertical-align: top;">
+                                <td style="padding: var(--space-4); white-space: nowrap;">@audit.TimestampUtc.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                <td style="padding: var(--space-4); font-weight: 600;">@audit.EntityName</td>
+                                <td style="padding: var(--space-4);">
+                                    <span class="badge @(audit.Action == Foundation.Domain.Enums.AuditAction.Create ? "badge-success" : audit.Action == Foundation.Domain.Enums.AuditAction.Delete ? "badge-danger" : "badge-info")" style="padding: 2px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                                        @audit.Action
+                                    </span>
+                                </td>
+                                <td style="padding: var(--space-4); font-family: monospace; font-size: var(--text-xs);">@audit.EntityId</td>
+                                <td style="padding: var(--space-4); font-family: monospace; font-size: var(--text-xs);">@(audit.UserId?.ToString() ?? "System")</td>
+                                <td style="padding: var(--space-4); max-width: 400px;">
+                                    <details>
+                                        <summary style="cursor: pointer; color: var(--primary); font-size: var(--text-xs);">View Changes</summary>
+                                        <pre style="margin-top: var(--space-2); background-color: var(--surface-alt); padding: var(--space-2); border-radius: var(--radius-sm); font-size: var(--text-xs); overflow-x: auto; max-height: 200px;">@audit.ChangesJson</pre>
+                                    </details>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

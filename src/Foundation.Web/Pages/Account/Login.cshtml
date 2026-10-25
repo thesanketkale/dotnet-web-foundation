@@ -1,0 +1,53 @@
+@page
+@model Foundation.Web.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="row" style="display: flex; justify-content: center; margin-top: var(--space-8);">
+    <div style="width: 100%; max-width: 440px;">
+        <div class="card" style="padding: var(--space-8);">
+            <h1 style="font-size: var(--text-2xl); margin-top: 0; text-align: center;">Sign In</h1>
+            <p class="text-muted" style="text-align: center; margin-bottom: var(--space-6);">
+                Enter your credentials to access your account.
+            </p>
+
+            <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Email" class="form-label">Email</label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label asp-for="Input.Password" class="form-label">Password</label>
+                        <a asp-page="./ForgotPassword" style="font-size: var(--text-xs);">Forgot password?</a>
+                    </div>
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group" style="display: flex; align-items: center; gap: var(--space-2);">
+                    <input asp-for="Input.RememberMe" id="rememberMeCheckbox" type="checkbox" />
+                    <label for="rememberMeCheckbox" style="font-size: var(--text-sm); margin: 0;">Remember me on this device</label>
+                </div>
+
+                <div style="margin-top: var(--space-6);">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+                </div>
+            </form>
+
+            <div style="margin-top: var(--space-6); text-align: center; font-size: var(--text-sm);">
+                <span>Don't have an account?</span>
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
