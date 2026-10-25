@@ -1,8 +1,8 @@
 # dotnet-web-foundation
 
-[![Build & Test](https://github.com/thesanketkale/dotnet-webapp-template/actions/workflows/ci.yml/badge.svg)](https://github.com/thesanketkale/dotnet-webapp-template/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/thesanketkale/dotnet-webapp-template/actions/workflows/codeql.yml/badge.svg)](https://github.com/thesanketkale/dotnet-webapp-template/actions/workflows/codeql.yml)
-[![Dependency Review](https://github.com/thesanketkale/dotnet-webapp-template/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/thesanketkale/dotnet-webapp-template/actions/workflows/dependency-review.yml)
+[![Build & Test](https://github.com/thesanketkale/dotnet-web-foundation/actions/workflows/ci.yml/badge.svg)](https://github.com/thesanketkale/dotnet-web-foundation/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/thesanketkale/dotnet-web-foundation/actions/workflows/codeql.yml/badge.svg)](https://github.com/thesanketkale/dotnet-web-foundation/actions/workflows/codeql.yml)
+[![Dependency Review](https://github.com/thesanketkale/dotnet-web-foundation/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/thesanketkale/dotnet-web-foundation/actions/workflows/dependency-review.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Target: .NET 10 LTS](https://img.shields.io/badge/.NET-10.0%20LTS-purple.svg)](https://dotnet.microsoft.com/)
 
