@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@3951f0dfe7a07e2313ec93c75700083e2005cbab # v4.3.0
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Cache NuGet packages
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772115b6fe6 # v4.2.2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/Directory.Packages.props', '**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Verify code formatting
+        run: dotnet format --verify-no-changes --verbosity normal
+
+      - name: Build solution (Release)
+        run: dotnet build --no-restore -c Release -warnaserror
+
+      - name: Run unit & architecture tests
+        run: dotnet test tests/Foundation.UnitTests/Foundation.UnitTests.csproj --no-build -c Release --logger "trx;LogFileName=unit_tests.trx"
+
+      - name: Run architecture tests
+        run: dotnet test tests/Foundation.ArchitectureTests/Foundation.ArchitectureTests.csproj --no-build -c Release --logger "trx;LogFileName=arch_tests.trx"
+
+      - name: Check for vulnerable dependencies
+        run: dotnet list package --vulnerable --include-transitive
+
+      - name: Audit dependency licenses
+        shell: pwsh
+        run: ./scripts/check-licenses.ps1
+
+  container-build:
+    name: Container Build & Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [build-and-test]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+
+      - name: Build container image (dry-run)
+        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: dotnet-web-foundation:ci-test
