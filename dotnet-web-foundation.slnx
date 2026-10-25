@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Foundation.Application/Foundation.Application.csproj" />
+    <Project Path="src/Foundation.Domain/Foundation.Domain.csproj" />
+    <Project Path="src/Foundation.Infrastructure/Foundation.Infrastructure.csproj" />
+    <Project Path="src/Foundation.Migrations.MySql/Foundation.Migrations.MySql.csproj" />
+    <Project Path="src/Foundation.Migrations.SqlServer/Foundation.Migrations.SqlServer.csproj" />
+    <Project Path="src/Foundation.Web/Foundation.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Foundation.ArchitectureTests/Foundation.ArchitectureTests.csproj" />
+    <Project Path="tests/Foundation.E2ETests/Foundation.E2ETests.csproj" />
+    <Project Path="tests/Foundation.IntegrationTests/Foundation.IntegrationTests.csproj" />
+    <Project Path="tests/Foundation.UnitTests/Foundation.UnitTests.csproj" />
+  </Folder>
+</Solution>

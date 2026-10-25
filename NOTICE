@@ -1,0 +1,15 @@
+dotnet-web-foundation
+Copyright (c) 2026 Sanket Kale
+
+This product includes software developed by open-source communities under permissive licenses:
+- .NET runtime and ASP.NET Core libraries (MIT License) - Copyright (c) .NET Foundation and Contributors
+- Entity Framework Core (MIT License) - Copyright (c) .NET Foundation and Contributors
+- Pomelo.EntityFrameworkCore.MySql (MIT License) - Copyright (c) Pomelo Foundation
+- Markdig (BSD-2-Clause License) - Copyright (c) Alexandre Mutel
+- HtmlSanitizer (MIT License) - Copyright (c) Michael Ganss
+- Serilog (Apache-2.0 License) - Copyright (c) Serilog Contributors
+- OpenTelemetry .NET (Apache-2.0 License) - Copyright (c) .NET Foundation and Contributors
+- Testcontainers for .NET (MIT License) - Copyright (c) Testcontainers
+- NetArchTest.Rules (MIT License) - Copyright (c) Ben Morris
+- Shouldly (MIT License) - Copyright (c) Shouldly Contributors
+- Playwright for .NET (Apache-2.0 License) - Copyright (c) Microsoft Corporation

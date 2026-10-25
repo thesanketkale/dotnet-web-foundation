@@ -1,0 +1,47 @@
+# .NET Core / Visual Studio
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.idea/
+*.DotSettings.user
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Build outputs & test results
+TestResults/
+[Dd]ebug/
+[Rr]elease/
+*.log
+*.coverage
+*.coveragexml
+
+# User uploads & runtime local data (App_Data)
+App_Data/uploads/*
+!App_Data/uploads/.gitkeep
+App_Data/logs/*
+!App_Data/logs/.gitkeep
+
+# User Secrets & Environment overrides
+appsettings.Production.json
+appsettings.Local.json
+*.env
+.env.local
+
+# Node & Frontend (if any temporary tooling used)
+node_modules/
+dist/
+
+# OS generated
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Agent team internal state
+.pipeline/
