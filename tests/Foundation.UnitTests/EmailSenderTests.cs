@@ -8,7 +8,7 @@ namespace Foundation.UnitTests;
 
 public class EmailSenderTests
 {
-    [Fact(DisplayName = "AC-3: SmtpEmailSender defines source-generated LoggerMessage methods", Skip = "pending AC-3 (step 1)")]
+    [Fact(DisplayName = "AC-3: SmtpEmailSender defines source-generated LoggerMessage methods")]
     public void AC_3_SmtpEmailSender_Defines_Source_Generated_LoggerMessage_Methods()
     {
         var methods = typeof(SmtpEmailSender)
@@ -22,7 +22,7 @@ public class EmailSenderTests
         loggerMessageMethods.ShouldNotBeEmpty();
     }
 
-    [Fact(DisplayName = "AC-3: SmtpEmailSender falls back to logger on SMTP failure", Skip = "pending AC-3 (step 1)")]
+    [Fact(DisplayName = "AC-3: SmtpEmailSender falls back to logger on SMTP failure")]
     public async Task AC_3_SmtpEmailSender_Falls_Back_To_Logger_On_Smtp_Failure()
     {
         var testLogger = new TestLogger<SmtpEmailSender>();

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Foundation.Infrastructure.Services;
 
-public class SmtpEmailSender : IEmailSender
+public partial class SmtpEmailSender : IEmailSender
 {
     private readonly string _host;
     private readonly int _port;
@@ -38,7 +38,7 @@ public class SmtpEmailSender : IEmailSender
 
     public async Task SendEmailAsync(string toEmail, string subject, string htmlMessage, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation("Sending email to {Recipient} with subject '{Subject}'", toEmail, subject);
+        LogSendingEmail(_logger, toEmail, subject);
 
         using var client = new SmtpClient(_host, _port)
         {
@@ -62,14 +62,25 @@ public class SmtpEmailSender : IEmailSender
         try
         {
             await client.SendMailAsync(message, cancellationToken);
-            _logger.LogInformation("Email successfully sent to {Recipient}", toEmail);
+            LogEmailSent(_logger, toEmail);
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to send email via SMTP to {Recipient}. Falling back to log output.", toEmail);
+            LogSmtpFailure(_logger, ex, toEmail);
             // In dev / testcontainers without SMTP server active, log the message body so tokens can be retrieved
-            _logger.LogInformation("--- EMAIL CONTENT ---\nTo: {To}\nSubject: {Subject}\nBody:\n{Body}\n--- END EMAIL ---",
-                toEmail, subject, htmlMessage);
+            LogFallbackEmailContent(_logger, toEmail, subject, htmlMessage);
         }
     }
+
+    [LoggerMessage(EventId = 1, Level = LogLevel.Information, Message = "Sending email to {Recipient} with subject '{Subject}'")]
+    private static partial void LogSendingEmail(ILogger logger, string recipient, string subject);
+
+    [LoggerMessage(EventId = 2, Level = LogLevel.Information, Message = "Email successfully sent to {Recipient}")]
+    private static partial void LogEmailSent(ILogger logger, string recipient);
+
+    [LoggerMessage(EventId = 3, Level = LogLevel.Warning, Message = "Failed to send email via SMTP to {Recipient}. Falling back to log output.")]
+    private static partial void LogSmtpFailure(ILogger logger, Exception ex, string recipient);
+
+    [LoggerMessage(EventId = 4, Level = LogLevel.Information, Message = "--- EMAIL CONTENT ---\nTo: {To}\nSubject: {Subject}\nBody:\n{Body}\n--- END EMAIL ---")]
+    private static partial void LogFallbackEmailContent(ILogger logger, string to, string subject, string body);
 }
