@@ -59,7 +59,8 @@ jobs:
         run: ./scripts/check-licenses.ps1
 
       - name: Write build & test summary
-        if: always()
+        if: success()
+        shell: bash
         env:
           JOB_STATUS: ${{ job.status }}
           COMMIT_SHA: ${{ github.sha }}
@@ -102,7 +103,8 @@ jobs:
           tags: dotnet-web-foundation:ci-test
 
       - name: Write container build summary
-        if: always()
+        if: success()
+        shell: bash
         env:
           JOB_STATUS: ${{ job.status }}
         run: |

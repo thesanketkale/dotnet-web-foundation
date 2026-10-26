@@ -19,7 +19,7 @@ public class EmailSenderTests
             .ToList();
 
         // AC-3 requires source-generated [LoggerMessage] partial methods for logging calls
-        loggerMessageMethods.ShouldNotBeEmpty();
+        loggerMessageMethods.Count.ShouldBe(4);
     }
 
     [Fact(DisplayName = "AC-3: SmtpEmailSender falls back to logger on SMTP failure")]
@@ -51,6 +51,7 @@ public class EmailSenderTests
         // Verify fallback log output contains recipient and content
         testLogger.Logs.ShouldContain(l => l.Level == LogLevel.Warning && l.Message.Contains("Failed to send email via SMTP"));
         testLogger.Logs.ShouldContain(l => l.Level == LogLevel.Information && l.Message.Contains("user@example.com"));
+        testLogger.Logs.ShouldContain(l => l.Level == LogLevel.Information && l.Message.Contains("<p>Token: 123456</p>"));
     }
 
     private sealed class TestLogger<T> : ILogger<T>
