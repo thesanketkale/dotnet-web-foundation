@@ -45,3 +45,4 @@ ehthumbs.db
 
 # Agent team internal state
 .pipeline/
+.claude/settings.local.json

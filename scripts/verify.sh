@@ -34,10 +34,19 @@ have() { if command -v "$1" >/dev/null 2>&1 || [ -x "$1" ]; then return 0; fi; s
 fast_checks() {
   if have dotnet; then
     step "dotnet format check" dotnet format --verify-no-changes --verbosity quiet
+    step "dotnet build (Release)" dotnet build --nologo -c Release -warnaserror
   fi
 
   if have actionlint; then
     step "actionlint workflow validation" actionlint
+  fi
+}
+
+# ---------------------------------------------------------------- FULL ----
+full_checks() {
+  if have dotnet; then
+    step "dotnet test (Release)" dotnet test --nologo -c Release --no-build
+    step "dotnet list package (vulnerable)" dotnet list package --vulnerable --include-transitive
   fi
 
   if have pwsh; then
@@ -45,13 +54,13 @@ fast_checks() {
   elif have powershell; then
     step "license allow-list audit" powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-licenses.ps1
   fi
-}
 
-# ---------------------------------------------------------------- FULL ----
-full_checks() {
-  if have dotnet; then
-    step "dotnet build (Release)" dotnet build --nologo -c Release -warnaserror
-    step "dotnet test (Release)" dotnet test --nologo -c Release --no-build
+  if have docker; then
+    if docker info >/dev/null 2>&1; then
+      step "docker build" docker build -t dotnet-web-foundation:test .
+    else
+      skip "docker (daemon not running)"
+    fi
   fi
 }
 
