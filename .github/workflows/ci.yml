@@ -1,23 +1,61 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
+  secret-scan:
+    name: Secret Scan (Gitleaks)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    if: github.event_name != 'schedule'
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository with full history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks secret scanner
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+
   build-and-test:
-    name: Build & Test
-    runs-on: ubuntu-latest
+    name: Build & Test (.NET 10)
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
+    if: github.event_name != 'schedule'
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -37,21 +75,27 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Restore dependencies
+        shell: bash
         run: dotnet restore
 
       - name: Verify code formatting
+        shell: bash
         run: dotnet format --verify-no-changes --verbosity normal
 
       - name: Build solution (Release)
+        shell: bash
         run: dotnet build --no-restore -c Release -warnaserror
 
       - name: Run unit tests
+        shell: bash
         run: dotnet test tests/Foundation.UnitTests/Foundation.UnitTests.csproj --no-build -c Release --logger "trx;LogFileName=unit_tests.trx"
 
       - name: Run architecture tests
+        shell: bash
         run: dotnet test tests/Foundation.ArchitectureTests/Foundation.ArchitectureTests.csproj --no-build -c Release --logger "trx;LogFileName=arch_tests.trx"
 
       - name: Check for vulnerable dependencies
+        shell: bash
         run: dotnet list package --vulnerable --include-transitive
 
       - name: Audit dependency licenses
@@ -81,11 +125,45 @@ jobs:
             echo "Result: **${JOB_STATUS}** | Commit: \`${COMMIT_SHA}\` (${REF_NAME})"
           } >> "$GITHUB_STEP_SUMMARY"
 
+  codeql:
+    name: CodeQL Security Analysis
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          languages: csharp
+          build-mode: manual
+
+      - name: Build solution for CodeQL analysis
+        shell: bash
+        run: dotnet build -c Release
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+
   container-build:
     name: Container Build & Verification
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     needs: [build-and-test]
+    if: github.event_name != 'schedule'
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
